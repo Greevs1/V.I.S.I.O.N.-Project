@@ -1,0 +1,85 @@
+{
+  "name": "DocumentIngestionJob",
+  "type": "object",
+  "description": "Durable orchestration ledger for document ingestion. NOT truth: it answers only 'does durable work still need to happen?'. Document, analysis, classification, extraction, business, scope and review truth all live in their canonical records and are re-derived from them on every run. It deliberately carries no business_id, document_scope, profile_id, role, email, document_type, classification, subtype, tax year, folder, extracted data or review decision.",
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "description": "Canonical documents row id this job exists for. The only document identity used."
+    },
+    "analysis_id": {
+      "type": "string",
+      "description": "Canonical document_analysis row id this job exists for."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "processing",
+        "waiting_retry",
+        "completed",
+        "failed"
+      ],
+      "default": "queued",
+      "description": "Orchestration state only. It never mirrors classification or extraction states \u2014 those belong to canonical intelligence state."
+    },
+    "attempt_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Attempts already started. Bounded by MAX_ATTEMPTS (3). A CLAIMED processing attempt counts, and so does a worker attempt that reached canonical resolution and failed there. A zero has exactly ONE documented meaning: no processing attempt was ever claimed \u2014 which happens only for a pre-claim TERMINAL outcome, where last_error_class is one of configuration_error, source_missing or relationship_mismatch and claimed_at is null. A transient infrastructure failure is always retried before it can become terminal."
+    },
+    "last_attempt_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_error_class": {
+      "type": "string",
+      "description": "transient | permanent | transient_exhausted | configuration_error | source_missing | relationship_mismatch. configuration_error means the worker could not reach the canonical source for a configuration reason (a malformed project URL, an invalid credential, a rejected request path) and retrying cannot help. source_missing is used ONLY when a canonical read SUCCEEDED and proved the source absent \u2014 a failed query is never source_missing."
+    },
+    "last_error_message": {
+      "type": "string",
+      "description": "Orchestration reason for the last outcome. Never user-facing intelligence state."
+    },
+    "next_retry_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When a waiting_retry job becomes claimable again."
+    },
+    "claimed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lease_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "A claim is a lease, never an eternal boolean lock: once it expires a recovery sweep may reclaim the job."
+    }
+  },
+  "required": [
+    "document_id",
+    "analysis_id",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

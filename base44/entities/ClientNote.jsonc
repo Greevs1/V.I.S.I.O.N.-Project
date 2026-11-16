@@ -1,0 +1,172 @@
+{
+  "name": "ClientNote",
+  "type": "object",
+  "properties": {
+    "profile_id": {
+      "type": "string",
+      "description": "Supabase profile ID of the client this note is about"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "created_by_profile_id": {
+      "type": "string",
+      "description": "Supabase profile ID of the note author"
+    },
+    "created_by_name": {
+      "type": "string"
+    },
+    "note_type": {
+      "type": "string",
+      "enum": [
+        "general_note",
+        "strategy_note",
+        "sprint_note",
+        "outcome_note",
+        "document_review_note",
+        "client_call_note",
+        "follow_up_needed"
+      ],
+      "default": "general_note"
+    },
+    "title": {
+      "type": "string"
+    },
+    "content_html": {
+      "type": "string",
+      "description": "Rich text HTML body"
+    },
+    "plain_text": {
+      "type": "string",
+      "description": "Plaintext version for search"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "internal_only",
+        "advisor_team",
+        "client_visible"
+      ],
+      "default": "internal_only"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "default": "active"
+    },
+    "pinned": {
+      "type": "boolean",
+      "default": false
+    },
+    "follow_up_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "follow_up_status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "open",
+        "completed",
+        "overdue"
+      ],
+      "default": "none"
+    },
+    "related_source_type": {
+      "type": "string",
+      "enum": [
+        "sprint",
+        "outcome",
+        "document",
+        "opportunity",
+        "assessment",
+        "strategy",
+        "general"
+      ]
+    },
+    "related_source_id": {
+      "type": "string"
+    },
+    "updated_by_profile_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_id",
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "$and": [
+            {
+              "data.profile_id": "{{user.id}}"
+            },
+            {
+              "data.visibility": "client_visible"
+            }
+          ]
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

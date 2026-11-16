@@ -1,0 +1,118 @@
+{
+  "name": "ClassificationMemory",
+  "type": "object",
+  "properties": {
+    "document_type": {
+      "type": "string"
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "file_name_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "verified_folder": {
+      "type": "string",
+      "description": "System folder ID"
+    },
+    "verified_subfolder": {
+      "type": "string"
+    },
+    "approval_count": {
+      "type": "number",
+      "default": 1
+    },
+    "weighted_score": {
+      "type": "number",
+      "default": 1,
+      "description": "Weighted by approver role"
+    },
+    "confidence_boost": {
+      "type": "number",
+      "default": 0,
+      "description": "Extra confidence % from learning"
+    },
+    "business_id": {
+      "type": "string",
+      "description": "null = platform-level, set = business-specific"
+    },
+    "last_verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approved_by_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "document_type",
+    "verified_folder"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

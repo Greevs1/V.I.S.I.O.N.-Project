@@ -1,0 +1,149 @@
+{
+  "name": "CalendarSyncEvent",
+  "type": "object",
+  "properties": {
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "booking",
+        "sprint_task",
+        "sprint_path",
+        "sprint_reminder"
+      ],
+      "description": "What this event originated from"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of the source record"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "google",
+        "outlook",
+        "ical"
+      ],
+      "default": "ical"
+    },
+    "provider_event_id": {
+      "type": "string",
+      "description": "Provider's event ID (Google Calendar event ID, etc.)"
+    },
+    "calendar_id": {
+      "type": "string",
+      "description": "Calendar ID on the provider"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "timezone": {
+      "type": "string",
+      "default": "America/Phoenix"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "synced",
+        "pending",
+        "failed",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "last_synced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "sprint_id": {
+      "type": "string",
+      "description": "Related sprint ID for sprint-sourced events"
+    }
+  },
+  "required": [
+    "source_type",
+    "source_id",
+    "title",
+    "start_time"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

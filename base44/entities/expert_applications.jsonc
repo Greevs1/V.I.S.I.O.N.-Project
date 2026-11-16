@@ -1,0 +1,148 @@
+{
+  "name": "expert_applications",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "linkedin_url": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "years_experience": {
+      "type": "number"
+    },
+    "credentials": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "industries_served": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "revenue_ranges_served": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "states_licensed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "specialties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "calendar_booking_url": {
+      "type": "string"
+    },
+    "application_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "under_review",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "reviewer_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "email"
+  ],
+  "rls": {
+    "create": null,
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

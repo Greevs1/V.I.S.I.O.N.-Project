@@ -1,0 +1,103 @@
+{
+  "name": "Assessment",
+  "type": "object",
+  "properties": {
+    "assessment_type": {
+      "type": "string",
+      "enum": [
+        "profit_gap",
+        "value_gap",
+        "recast_ebitda",
+        "tax_gap",
+        "operations_gap",
+        "freedom_assessment"
+      ],
+      "description": "Type of assessment"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "completed"
+      ],
+      "default": "not_started"
+    },
+    "answers": {
+      "type": "object",
+      "description": "Assessment answers and inputs"
+    },
+    "results": {
+      "type": "object",
+      "description": "Calculated results from the assessment"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Business industry"
+    },
+    "business_id": {
+      "type": "string",
+      "description": "Business ID this assessment is scoped to \u2014 strict isolation"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "assessment_type"
+  ],
+  "rls": {
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "*/5 * * * *",
+      "one_time_date": null,
+      "timezone": "America/Phoenix",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "name": "Document Ingestion Recovery",
+  "description": "RECOVERY ONLY \u2014 not normal ingestion. Normal ingestion is the entity-triggered Document Ingestion workflow. This sweep reclaims only stranded work: a queued job whose trigger was missed, a processing job whose lease expired because the worker died, or a waiting_retry job whose next retry is due. It ignores completed jobs, terminal failures and jobs holding a live lease, and it calls the same canonical worker.",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "document_ingestion_recovery",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_recovery_sweep": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "processDocumentIngestionJob",
+            "args": {
+              "sweep": true
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Recover stranded jobs",
+            "description": "Missed trigger, expired lease, due retry"
+          }
+        }
+      }
+    ]
+  }
+}

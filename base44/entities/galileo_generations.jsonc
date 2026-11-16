@@ -1,0 +1,158 @@
+{
+  "name": "galileo_generations",
+  "type": "object",
+  "properties": {
+    "profile_id": {
+      "type": "string"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "generation_type": {
+      "type": "string",
+      "enum": [
+        "initial_generation",
+        "opportunity_refresh",
+        "path_replacement",
+        "sprint_generation",
+        "advisor_regeneration",
+        "manual_regeneration"
+      ]
+    },
+    "trigger_source": {
+      "type": "string",
+      "enum": [
+        "assessment_completed",
+        "document_uploaded",
+        "advisor_request",
+        "sprint_completed",
+        "path_completed",
+        "scheduled_review",
+        "manual_refresh"
+      ]
+    },
+    "generated_by": {
+      "type": "string"
+    },
+    "source_snapshot_id": {
+      "type": "string"
+    },
+    "previous_generation_id": {
+      "type": "string"
+    },
+    "active_path_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "generated_opportunity_count": {
+      "type": "number"
+    },
+    "selected_opportunity_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "previous_top_3": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "new_top_3": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "score_changes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "summary": {
+      "type": "string"
+    },
+    "reasoning": {
+      "type": "object"
+    },
+    "confidence_score": {
+      "type": "number"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "business_id",
+    "generation_type"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.profile_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

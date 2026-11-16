@@ -1,0 +1,156 @@
+{
+  "name": "Agreement",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "agreement_type": {
+      "type": "string",
+      "enum": [
+        "engagement_agreement",
+        "client_agreement",
+        "buy_sell_agreement",
+        "operating_agreement",
+        "nda",
+        "service_agreement",
+        "tax_authorization",
+        "advisor_agreement",
+        "other"
+      ],
+      "default": "engagement_agreement"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "assigned",
+        "awaiting_review",
+        "awaiting_signature",
+        "signed",
+        "completed",
+        "expired",
+        "cancelled"
+      ],
+      "default": "draft"
+    },
+    "assigned_to": {
+      "type": "array",
+      "description": "User IDs this agreement is assigned to",
+      "items": {
+        "type": "string"
+      }
+    },
+    "assigned_by": {
+      "type": "string",
+      "description": "User ID of assigning admin/advisor"
+    },
+    "business_id": {
+      "type": "string",
+      "description": "Supabase business ID"
+    },
+    "profile_id": {
+      "type": "string",
+      "description": "Supabase profile ID of the owner"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "Attached document URL (from Data Room)"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "file_size": {
+      "type": "number"
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Linked Supabase documents row ID"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

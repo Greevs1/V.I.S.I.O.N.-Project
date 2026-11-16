@@ -1,0 +1,93 @@
+{
+  "name": "SprintTaskDocument",
+  "type": "object",
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "sprint_id": {
+      "type": "string"
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Supabase documents row ID"
+    },
+    "document_name": {
+      "type": "string"
+    },
+    "attached_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "task_id",
+    "document_id"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

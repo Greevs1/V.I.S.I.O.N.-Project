@@ -1,0 +1,103 @@
+{
+  "name": "client_saved_experts",
+  "type": "object",
+  "properties": {
+    "client_profile_id": {
+      "type": "string"
+    },
+    "expert_profile_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "specialty": {
+      "type": "string"
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "saved",
+        "favorited",
+        "my_expert"
+      ],
+      "default": "saved"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "platform",
+        "client_added"
+      ],
+      "default": "platform"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_profile_id"
+  ],
+  "rls": {
+    "create": {
+      "data.client_profile_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "data.client_profile_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "data.client_profile_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "data.client_profile_id": "{{user.id}}"
+        }
+      ]
+    }
+  }
+}

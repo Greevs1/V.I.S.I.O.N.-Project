@@ -1,0 +1,130 @@
+{
+  "name": "Document",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Document name"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL of the uploaded file"
+    },
+    "document_type": {
+      "type": "string",
+      "enum": [
+        "profit_loss",
+        "balance_sheet",
+        "tax_return",
+        "payroll_report",
+        "other"
+      ],
+      "description": "Type of financial document"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "uploading",
+        "processing",
+        "completed",
+        "failed"
+      ],
+      "default": "uploading"
+    },
+    "confidence_score": {
+      "type": "number",
+      "description": "AI confidence score 0-100"
+    },
+    "extracted_data": {
+      "type": "object",
+      "description": "Extracted financial data from the document"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "File size in bytes"
+    },
+    "year": {
+      "type": "number",
+      "description": "Fiscal year of the document"
+    },
+    "is_admin_file": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this file was uploaded by admin for all users to access"
+    }
+  },
+  "required": [
+    "name",
+    "file_url"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    }
+  }
+}

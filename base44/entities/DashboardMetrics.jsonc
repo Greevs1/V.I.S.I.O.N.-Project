@@ -1,0 +1,218 @@
+{
+  "name": "DashboardMetrics",
+  "type": "object",
+  "properties": {
+    "revenue": {
+      "type": "number"
+    },
+    "net_profit": {
+      "type": "number"
+    },
+    "net_profit_margin": {
+      "type": "number"
+    },
+    "recast_ebitda": {
+      "type": "number"
+    },
+    "enterprise_value": {
+      "type": "number"
+    },
+    "industry": {
+      "type": "string"
+    },
+    "ciq_score": {
+      "type": "number",
+      "description": "V.I.S.I.O.N. IQ score 0-100"
+    },
+    "freedom_score": {
+      "type": "number",
+      "description": "Freedom score 0-100"
+    },
+    "profit_gap": {
+      "type": "object",
+      "properties": {
+        "gap_to_average": {
+          "type": "number"
+        },
+        "gap_to_best": {
+          "type": "number"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "small",
+            "moderate",
+            "significant"
+          ]
+        }
+      }
+    },
+    "value_gap": {
+      "type": "object",
+      "properties": {
+        "current_value": {
+          "type": "number"
+        },
+        "potential_value": {
+          "type": "number"
+        },
+        "gap_amount": {
+          "type": "number"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "small",
+            "moderate",
+            "significant"
+          ]
+        }
+      }
+    },
+    "tax_gap": {
+      "type": "object",
+      "properties": {
+        "annual_overpayment": {
+          "type": "number"
+        },
+        "ten_year_cost": {
+          "type": "number"
+        },
+        "opportunities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "small",
+            "moderate",
+            "significant"
+          ]
+        }
+      }
+    },
+    "operations_gap": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "type": "number"
+        },
+        "monthly_value_freed": {
+          "type": "number"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "small",
+            "moderate",
+            "significant"
+          ]
+        }
+      }
+    },
+    "recast_ebitda_gap": {
+      "type": "object",
+      "properties": {
+        "add_backs": {
+          "type": "number"
+        },
+        "valuation_increase": {
+          "type": "number"
+        }
+      }
+    },
+    "freedom_gap": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "type": "number"
+        },
+        "freedom_date": {
+          "type": "string"
+        },
+        "time_recoverable": {
+          "type": "string"
+        }
+      }
+    },
+    "historical_ciq": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  "required": [],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

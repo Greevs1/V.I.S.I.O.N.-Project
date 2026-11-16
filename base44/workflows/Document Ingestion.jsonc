@@ -1,0 +1,84 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "DocumentIngestionJob"
+    }
+  },
+  "name": "Document Ingestion",
+  "description": "Durable ingestion trigger. When a DocumentIngestionJob is created for a stored document with a queued analysis, the canonical worker claims the job and runs the existing understanding \u2192 applied type \u2192 reader \u2192 extraction pipeline. A transient failure waits durably and retries once in delivery; further attempts are driven by the recovery sweep, bounded by attempt_count.",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "document_ingestion",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_ingestion_worker": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "processDocumentIngestionJob",
+            "args": {
+              "job_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "route_outcome",
+          "x-base44": {
+            "title": "Claim and run ingestion",
+            "description": "Understanding, applied type, reader, extraction"
+          }
+        }
+      },
+      {
+        "route_outcome": {
+          "switch": [
+            {
+              "when": "${ .run_ingestion_worker.decision == \"retry\" }",
+              "then": "retry_backoff"
+            },
+            {
+              "when": "${ true }",
+              "then": "end"
+            }
+          ],
+          "x-base44": {
+            "title": "Decide outcome",
+            "description": "Retry only when the worker returned a retryable outcome"
+          }
+        }
+      },
+      {
+        "retry_backoff": {
+          "wait": "PT2M",
+          "then": "retry_ingestion_worker",
+          "x-base44": {
+            "title": "Wait before retry",
+            "description": "Durable backoff, survives restarts"
+          }
+        }
+      },
+      {
+        "retry_ingestion_worker": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "processDocumentIngestionJob",
+            "args": {
+              "job_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Retry ingestion",
+            "description": "Second bounded attempt; the ledger bounds the rest"
+          }
+        }
+      }
+    ]
+  }
+}

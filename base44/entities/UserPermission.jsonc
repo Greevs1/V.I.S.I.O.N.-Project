@@ -1,0 +1,178 @@
+{
+  "name": "UserPermission",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Base44 user ID"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "command_center": {
+          "type": "boolean",
+          "default": true
+        },
+        "advisory_hub": {
+          "type": "boolean",
+          "default": true
+        },
+        "exit_readiness": {
+          "type": "boolean",
+          "default": false
+        },
+        "ma_simulator": {
+          "type": "boolean",
+          "default": false
+        },
+        "resource_library": {
+          "type": "boolean",
+          "default": true
+        },
+        "data_room": {
+          "type": "boolean",
+          "default": true
+        },
+        "view_iq": {
+          "type": "boolean",
+          "default": true
+        },
+        "iq_scorecard": {
+          "type": "boolean",
+          "default": true
+        },
+        "gap_analysis": {
+          "type": "boolean",
+          "default": true
+        },
+        "cost_inaction": {
+          "type": "boolean",
+          "default": true
+        },
+        "strategic_insights": {
+          "type": "boolean",
+          "default": true
+        },
+        "view_gps": {
+          "type": "boolean",
+          "default": true
+        },
+        "freedom_score": {
+          "type": "boolean",
+          "default": true
+        },
+        "next_best_move": {
+          "type": "boolean",
+          "default": false
+        },
+        "wealth_trajectory": {
+          "type": "boolean",
+          "default": false
+        },
+        "profit_gap": {
+          "type": "boolean",
+          "default": true
+        },
+        "value_gap": {
+          "type": "boolean",
+          "default": true
+        },
+        "tax_gap": {
+          "type": "boolean",
+          "default": false
+        },
+        "ops_gap": {
+          "type": "boolean",
+          "default": false
+        },
+        "freedom_assessment": {
+          "type": "boolean",
+          "default": false
+        },
+        "recast_ebitda": {
+          "type": "boolean",
+          "default": false
+        },
+        "agreements": {
+          "type": "boolean",
+          "default": true
+        },
+        "document_requests": {
+          "type": "boolean",
+          "default": true
+        },
+        "worksheets": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  },
+  "required": [
+    "user_id"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "data.user_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

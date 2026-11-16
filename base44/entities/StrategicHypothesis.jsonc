@@ -1,0 +1,178 @@
+{
+  "name": "StrategicHypothesis",
+  "type": "object",
+  "properties": {
+    "hypothesis_id": {
+      "type": "string",
+      "description": "Unique hypothesis identifier"
+    },
+    "related_recommendation_key": {
+      "type": "string",
+      "description": "Canonical BIE recommendation key this hypothesis relates to"
+    },
+    "title": {
+      "type": "string"
+    },
+    "strategic_thesis": {
+      "type": "string",
+      "description": "The core strategic reasoning behind this hypothesis"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "possible_upside": {
+      "type": "string"
+    },
+    "possible_risk": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number",
+      "description": "0-100 AI confidence in the hypothesis"
+    },
+    "missing_information": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suggested_validation_step": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "hypothesis",
+        "under_review",
+        "confirmed",
+        "rejected",
+        "promoted_to_canonical"
+      ],
+      "default": "hypothesis"
+    },
+    "requires_advisor_review": {
+      "type": "boolean",
+      "default": true
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "profile_id": {
+      "type": "string"
+    },
+    "generated_by_model": {
+      "type": "string",
+      "description": "Model/version that generated this hypothesis"
+    },
+    "pattern_sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Learning pattern IDs that informed this hypothesis"
+    },
+    "advisor_reviewed_by": {
+      "type": "string"
+    },
+    "advisor_reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "advisor_notes": {
+      "type": "string"
+    },
+    "advisor_decision": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "rejected",
+        "needs_more_data"
+      ]
+    }
+  },
+  "required": [
+    "hypothesis_id",
+    "related_recommendation_key",
+    "title",
+    "strategic_thesis"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "super_admin"
+      }
+    }
+  }
+}

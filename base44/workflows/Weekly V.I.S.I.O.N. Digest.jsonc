@@ -1,0 +1,50 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 16 * * 1",
+      "one_time_date": null,
+      "timezone": "UTC",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "name": "Weekly V.I.S.I.O.N. Digest",
+  "description": "Sends weekly V.I.S.I.O.N. digest notification every Monday at 9am",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "weekly_v_i_s_i_o_n_digest",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "weeklyDigestScheduled",
+            "args": {
+              "business_id": "42f42075-c453-436a-8c5f-2dc29ef718c6"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Generate weekly digest",
+            "description": "Business-scoped, in-app only"
+          }
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "weeklyDigest"
+  }
+}

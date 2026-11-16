@@ -1,0 +1,158 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "recipient_id": {
+      "type": "string"
+    },
+    "recipient_profile_id": {
+      "type": "string"
+    },
+    "sender_id": {
+      "type": "string"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "notification_type": {
+      "type": "string",
+      "enum": [
+        "reminder_due",
+        "task_assigned",
+        "document_request_assigned",
+        "document_assigned",
+        "resource_assigned",
+        "team_invite",
+        "booking_scheduled",
+        "booking_cancelled",
+        "booking_rescheduled",
+        "sprint_task_completed",
+        "sprint_completed",
+        "galileo_update",
+        "role_updated",
+        "permission_updated",
+        "weekly_digest",
+        "achievement_sprint_milestone",
+        "achievement_assessment_complete",
+        "achievement_opportunity_milestone",
+        "achievement_sprint_created",
+        "achievement_document_milestone",
+        "achievement_iq_milestone",
+        "sprint_needs_expert_review",
+        "sprint_changes_requested",
+        "valuation_request_received",
+        "valuation_request_update",
+        "valuation_information_requested",
+        "valuation_owner_responded",
+        "valuation_request_approved",
+        "valuation_request_declined",
+        "valuation_created",
+        "valuation_assigned"
+      ]
+    },
+    "notification_category": {
+      "type": "string",
+      "enum": [
+        "action_required",
+        "reminder",
+        "information",
+        "success",
+        "achievement",
+        "system"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "related_entity_type": {
+      "type": "string"
+    },
+    "related_entity_id": {
+      "type": "string"
+    },
+    "action_url": {
+      "type": "string"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    },
+    "read_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "opened_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "clicked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dismissed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_action_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "recipient_id",
+    "notification_type",
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "data.recipient_id": "{{user.id}}"
+    },
+    "update": {
+      "data.recipient_id": "{{user.id}}"
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

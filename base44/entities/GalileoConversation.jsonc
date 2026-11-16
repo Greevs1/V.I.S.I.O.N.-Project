@@ -1,0 +1,106 @@
+{
+  "name": "GalileoConversation",
+  "type": "object",
+  "properties": {
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "description": "Conversation messages"
+    },
+    "questions_used": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of questions used in this session"
+    },
+    "business_id": {
+      "type": "string",
+      "description": "Business ID this conversation is scoped to \u2014 strict isolation. Added Phase 6A for tenant integrity. Nullable for legacy conversations created before business scoping."
+    },
+    "session_type": {
+      "type": "string",
+      "enum": [
+        "magic_loop",
+        "home_conversation",
+        "expert_collaboration"
+      ],
+      "default": "home_conversation",
+      "description": "Type of Galileo conversation session"
+    },
+    "source_guest_session_id": {
+      "type": "string",
+      "description": "Guest session this conversation was promoted from. Stable promotion identifier \u2014 makes guest\u2192member conversation migration idempotent so a promotion retry cannot duplicate the conversation. Null for conversations that did not originate from a promoted guest session."
+    }
+  },
+  "required": [],
+  "rls": {
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

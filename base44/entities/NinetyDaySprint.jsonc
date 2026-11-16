@@ -1,0 +1,200 @@
+{
+  "name": "NinetyDaySprint",
+  "type": "object",
+  "properties": {
+    "selected_path": {
+      "type": "string",
+      "enum": [
+        "cash_flow",
+        "enterprise_value",
+        "tax_risk"
+      ],
+      "description": "Selected outcome path"
+    },
+    "path_title": {
+      "type": "string"
+    },
+    "path_goal": {
+      "type": "string"
+    },
+    "path_summary": {
+      "type": "string"
+    },
+    "business_name": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "galileo_confidence": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "completed",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "progress_percent": {
+      "type": "number",
+      "default": 0
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "galileo_verified_pending_expert",
+        "galileo_and_expert_verified",
+        "expert_changes_requested"
+      ],
+      "default": "galileo_verified_pending_expert"
+    },
+    "galileo_verified": {
+      "type": "boolean",
+      "default": true
+    },
+    "expert_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "expert_verified_by": {
+      "type": "string"
+    },
+    "expert_verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verification_notes": {
+      "type": "string"
+    },
+    "last_galileo_update_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "needs_expert_review": {
+      "type": "boolean",
+      "default": true
+    },
+    "review_requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "assigned_verifier_profile_id": {
+      "type": "string"
+    },
+    "assigned_verifier_name": {
+      "type": "string"
+    },
+    "assigned_verifier_email": {
+      "type": "string"
+    },
+    "assigned_verifier_role": {
+      "type": "string"
+    },
+    "assigned_verifier_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "assigned_verifier_by": {
+      "type": "string"
+    },
+    "verification_assignment_status": {
+      "type": "string",
+      "enum": [
+        "unassigned",
+        "assigned",
+        "completed",
+        "changes_requested"
+      ],
+      "default": "unassigned"
+    }
+  },
+  "required": [
+    "selected_path"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.assigned_verifier_profile_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.assigned_verifier_profile_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

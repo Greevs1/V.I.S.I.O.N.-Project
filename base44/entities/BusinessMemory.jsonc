@@ -1,0 +1,266 @@
+{
+  "name": "BusinessMemory",
+  "type": "object",
+  "properties": {
+    "memory_id": {
+      "type": "string",
+      "description": "Unique memory identifier"
+    },
+    "business_id": {
+      "type": "string",
+      "description": "Business ID this memory is scoped to \u2014 strict isolation"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "strategic_decision",
+        "long_term_objective",
+        "owner_preference",
+        "advisor_decision",
+        "major_commitment",
+        "material_business_event",
+        "leadership_change",
+        "operating_philosophy",
+        "transaction_intent",
+        "risk_acceptance",
+        "capital_allocation_decision",
+        "strategic_constraint"
+      ],
+      "description": "Memory category \u2014 what kind of durable context this is"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title of the memory"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Durable executive context \u2014 what should remain meaningful later"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date",
+      "description": "When this memory became effective"
+    },
+    "importance": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "strategic",
+        "useful",
+        "contextual"
+      ],
+      "default": "contextual",
+      "description": "Memory importance \u2014 affects retrieval priority, not urgency"
+    },
+    "confidence": {
+      "type": "number",
+      "description": "0-100 confidence in the memory"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "post_meeting_outcome",
+        "advisor_decision",
+        "growth_plan_milestone",
+        "valuation_publication",
+        "verification_resolution",
+        "owner_objective",
+        "business_structure_change",
+        "advisor_capture"
+      ],
+      "description": "Where this memory candidate originated"
+    },
+    "source_reference": {
+      "type": "object",
+      "description": "Reference to the existing authoritative record \u2014 NOT a copy",
+      "properties": {
+        "record_type": {
+          "type": "string"
+        },
+        "record_id": {
+          "type": "string"
+        },
+        "record_summary": {
+          "type": "string"
+        }
+      }
+    },
+    "source_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_name": {
+            "type": "string"
+          },
+          "source_type": {
+            "type": "string"
+          },
+          "source_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "created_from": {
+      "type": "string",
+      "enum": [
+        "post_meeting_closeout",
+        "advisor_capture",
+        "growth_plan",
+        "valuation",
+        "verification",
+        "manual"
+      ],
+      "description": "What system created this candidate"
+    },
+    "confirmed_by_profile_id": {
+      "type": "string",
+      "description": "Advisor profile ID who confirmed this memory"
+    },
+    "confirmed_by_name": {
+      "type": "string"
+    },
+    "confirmation_status": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "confirmed",
+        "superseded",
+        "expired",
+        "rejected"
+      ],
+      "default": "candidate"
+    },
+    "client_visible": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this memory may be shown to the owner \u2014 enforced before retrieval"
+    },
+    "superseded_by": {
+      "type": "string",
+      "description": "Memory ID that superseded this memory"
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "Memory ID this memory supersedes"
+    },
+    "review_date": {
+      "type": "string",
+      "format": "date",
+      "description": "When this memory should be reviewed for continued relevance"
+    },
+    "expiration_behavior": {
+      "type": "string",
+      "enum": [
+        "retain_historically",
+        "review_periodically",
+        "expire_when_superseded",
+        "expire_when_removed"
+      ],
+      "default": "retain_historically"
+    },
+    "current_relevance": {
+      "type": "string",
+      "enum": [
+        "current",
+        "historical",
+        "stale",
+        "expired"
+      ],
+      "default": "current"
+    },
+    "memory_status": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "confirmed",
+        "superseded",
+        "expired",
+        "rejected"
+      ],
+      "default": "candidate"
+    },
+    "relevance_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for structured retrieval (e.g. exit_planning, tax, growth, valuation)"
+    },
+    "confirmed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rejected_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rejected_by_profile_id": {
+      "type": "string"
+    },
+    "rejected_reason": {
+      "type": "string"
+    },
+    "superseded_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "memory_id",
+    "business_id",
+    "category",
+    "title",
+    "summary"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "super_admin"
+      }
+    }
+  }
+}

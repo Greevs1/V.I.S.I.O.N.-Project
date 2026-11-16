@@ -1,0 +1,138 @@
+{
+  "name": "galileo_business_snapshots",
+  "type": "object",
+  "properties": {
+    "profile_id": {
+      "type": "string"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "generation_id": {
+      "type": "string"
+    },
+    "snapshot_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "iq_score": {
+      "type": "number"
+    },
+    "profit_gap": {
+      "type": "number"
+    },
+    "value_gap": {
+      "type": "number"
+    },
+    "tax_gap": {
+      "type": "number"
+    },
+    "operations_gap": {
+      "type": "number"
+    },
+    "cash_flow_gap": {
+      "type": "number"
+    },
+    "protections_gap": {
+      "type": "number"
+    },
+    "wealth_gap": {
+      "type": "number"
+    },
+    "revenue": {
+      "type": "number"
+    },
+    "ebitda": {
+      "type": "number"
+    },
+    "annual_agi": {
+      "type": "number"
+    },
+    "monthly_take_home": {
+      "type": "number"
+    },
+    "opportunity_count": {
+      "type": "number"
+    },
+    "completed_paths": {
+      "type": "number"
+    },
+    "active_paths": {
+      "type": "number"
+    },
+    "completed_tasks": {
+      "type": "number"
+    },
+    "snapshotted_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "business_id"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.profile_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

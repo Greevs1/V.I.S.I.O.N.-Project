@@ -1,0 +1,169 @@
+{
+  "name": "galileo_opportunities",
+  "type": "object",
+  "properties": {
+    "profile_id": {
+      "type": "string"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "expected_outcome": {
+      "type": "string"
+    },
+    "estimated_value_created": {
+      "type": "number"
+    },
+    "estimated_tax_savings": {
+      "type": "number"
+    },
+    "estimated_cash_flow_improvement": {
+      "type": "number"
+    },
+    "estimated_profit_improvement": {
+      "type": "number"
+    },
+    "estimated_risk_reduction": {
+      "type": "number"
+    },
+    "impact_score": {
+      "type": "number"
+    },
+    "ease_score": {
+      "type": "number"
+    },
+    "urgency_score": {
+      "type": "number"
+    },
+    "confidence_score": {
+      "type": "number"
+    },
+    "time_to_value_score": {
+      "type": "number"
+    },
+    "strategic_opportunity_score": {
+      "type": "number"
+    },
+    "freedom_acceleration_score": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "active",
+        "completed",
+        "archived",
+        "superseded"
+      ],
+      "default": "available"
+    },
+    "converted_to_path": {
+      "type": "boolean",
+      "default": false
+    },
+    "path_id": {
+      "type": "string"
+    },
+    "generation_id": {
+      "type": "string"
+    },
+    "reasoning": {
+      "type": "object"
+    },
+    "industry_context": {
+      "type": "string"
+    },
+    "recommendation_reason": {
+      "type": "string"
+    },
+    "evidence_sources": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "expected_impact": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.profile_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

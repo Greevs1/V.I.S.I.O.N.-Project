@@ -1,0 +1,137 @@
+{
+  "name": "StrategyLearningPattern",
+  "type": "object",
+  "properties": {
+    "pattern_id": {
+      "type": "string",
+      "description": "Unique pattern identifier"
+    },
+    "pattern_source": {
+      "type": "string",
+      "enum": [
+        "strategy_outcomes",
+        "advisor_validation",
+        "cross_business_analysis",
+        "sprint_completion",
+        "document_intelligence"
+      ],
+      "description": "Where this pattern was derived from"
+    },
+    "recommendation_key": {
+      "type": "string",
+      "description": "Canonical BIE recommendation key"
+    },
+    "strategy_id": {
+      "type": "string",
+      "description": "Strategy Library strategy ID"
+    },
+    "strategy_name": {
+      "type": "string"
+    },
+    "businesses_included": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Business IDs that contributed to this pattern"
+    },
+    "sample_size": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of data points supporting this pattern"
+    },
+    "confidence": {
+      "type": "number",
+      "description": "0-100 confidence in the pattern"
+    },
+    "outcome_quality": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "default": "medium"
+    },
+    "advisor_validation_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "validated",
+        "corrected",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "model_version": {
+      "type": "string",
+      "description": "AI model/version that identified this pattern"
+    },
+    "is_experimental": {
+      "type": "boolean",
+      "default": true,
+      "description": "True if pattern is experimental, false if advisor-approved for production"
+    },
+    "learning_summary": {
+      "type": "string",
+      "description": "Human-readable summary of what was learned"
+    },
+    "matching_criteria": {
+      "type": "object",
+      "description": "Criteria for matching this pattern to future businesses (industry, revenue range, etc.)"
+    },
+    "ranking_adjustment": {
+      "type": "number",
+      "default": 0,
+      "description": "Adjustment to strategy ranking score when this pattern matches (-100 to +100)"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "validated_by": {
+      "type": "string"
+    },
+    "validated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "pattern_id",
+    "pattern_source",
+    "recommendation_key",
+    "learning_summary"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "super_admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "super_admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "super_admin"
+      }
+    }
+  }
+}

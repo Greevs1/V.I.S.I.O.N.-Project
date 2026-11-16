@@ -1,0 +1,1 @@
+// Phase 2F placeholder - benchmark constants integrated directly into engines
